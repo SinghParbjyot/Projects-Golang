@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_banking
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=banking
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - TZ=Europe/Madrid
+
+volumes:
+  postgresdata:
+    driver: local
