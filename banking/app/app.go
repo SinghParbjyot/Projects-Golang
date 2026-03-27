@@ -30,12 +30,14 @@ func Start() {
 	ch := &CustomerHandlers{service.NewCustomerService(customerRepositroyDb)}
 	ah := &AccountHandler{service: service.NewAccountService(accountRepositoryDb)}
 	//Defining routes for customers
-	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
-	router.HandleFunc("/customers/{customer_id}", ch.getCustomer).Methods(http.MethodGet)
-	router.HandleFunc("/customers?status", ch.getAllCustomers).Methods(http.MethodGet)
+	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet).
+		Name("GetAllCustomers")
+	router.HandleFunc("/customers/{customer_id}", ch.getCustomer).Methods(http.MethodGet).Name("GetCustomerById")
+	router.HandleFunc("/customers?status", ch.getAllCustomers).Methods(http.MethodGet).Name("NewAccount")
 	router.HandleFunc("/customers/{customer_id}/account", ah.NewAccount).Methods(http.MethodPost)
-	router.HandleFunc("/customers/{customer_id}/account/{account_id}", ah.MakeTransaction).Methods(http.MethodPost)
-
+	router.HandleFunc("/customers/{customer_id}/account/{account_id}", ah.MakeTransaction).Methods(http.MethodPost).Name("NewTransaction")
+	am := AuthMiddleware{domain.NewAuthRepository()}
+	router.Use(am.authorizationHandler())
 	//Route that return one customer requested by get with an id
 	//wiring
 	err := godotenv.Load()

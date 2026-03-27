@@ -10,6 +10,8 @@ import (
 
 const dbTSLayout = "2006-01-02 15:04:05"
 
+//go:generate mockgen -source=accountService.go -destination=../mocks/domain/mockAccountRepository.go -package=domain
+
 type AccountService interface {
 	NewAccount(request dto.NewAccountRequest) (*dto.NewAccountResponse, *errors.AppError)
 	MakeTransaction(request dto.TransactionRequest) (*dto.TransactionResponse, *errors.AppError)

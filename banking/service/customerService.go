@@ -7,6 +7,10 @@ import (
 )
 
 // Interface with the entry , which defines what  we can do in outr application
+//
+
+//go:generate mockgen -source=customerService.go -destination=../mocks/mock_customer_service.go -package=service
+
 type CustomerService interface {
 	GetAllCustomers(status string) ([]domain.Customer, error)
 	GetCustomer(string) (*dto.CustomerResponse, *errors.AppError)
